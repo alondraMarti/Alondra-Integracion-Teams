@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don Galleto - Compras</title>
+    <style>
+        /* Estilos generales y de menú */
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #A0683A;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        .menu-buttons button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #754C24;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .menu-buttons button:hover {
+            background-color: #A0683A;
+        }
+
+        .main-content {
+            margin-left: 270px; /* Espacio para la barra lateral */
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Estilos para el formulario */
+        form label, form input, form button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        form input {
+            padding: 8px;
+            font-size: 1rem;
+            border: 1px solid #A0683A;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #A0683A;
+            color: white;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #754C24;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <img src="ruta/a/logo.png" alt="Logo Don Galleto"> <!-- Logo -->
+        <h1>Compras</h1>
+        <div class="menu-buttons">
+            <button onclick="window.location.href='Ventas/ventas.html'">VENTAS</button>
+            <button onclick="window.location.href='Corte/corte.html'">CORTE</button>
+            <button onclick="window.location.href='Inventario/inventario.html'">INVENTARIO</button>
+            <button onclick="window.location.href='Compras/compras.html'">COMPRAS</button>
+            <button onclick="window.location.href='Produccion/produccion.html'">PRODUCCIÓN</button>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <h2>Registro de Ingredientes</h2>
+        <form id="registerForm">
+            <label>Nombre:</label>
+            <input type="text" id="nombre" required>
+
+            <label>Fecha de Caducidad:</label>
+            <input type="date" id="fechaCaducidad" required>
+
+            <label>Cantidad:</label>
+            <input type="number" id="cantidad" required>
+
+            <label>Unidad:</label>
+            <input type="text" id="unidad" required>
+
+            <label>Descripción:</label>
+            <input type="text" id="descripcion" required>
+
+            <label>Proveedor:</label>
+            <input type="text" id="proveedor" required>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nuevoIngrediente = {
+                nombre: document.getElementById('nombre').value,
+                fechaCaducidad: document.getElementById('fechaCaducidad').value,
+                cantidad: document.getElementById('cantidad').value,
+                unidad: document.getElementById('unidad').value,
+                descripcion: document.getElementById('descripcion').value,
+                proveedor: document.getElementById('proveedor').value
+            };
+
+            let inventario = JSON.parse(localStorage.getItem('inventario')) || [];
+            inventario.push(nuevoIngrediente);
+            localStorage.setItem('inventario', JSON.stringify(inventario));
+
+            window.location.href = 'inventario.html';
+        });
+    </script>
+</body>
+</html>
