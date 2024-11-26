@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don Galleto - Inventario</title>
+    <style>
+        /* Mantener los mismos estilos del menú y estructura general */
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #A0683A;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        .menu-buttons button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #754C24;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .menu-buttons button:hover {
+            background-color: #A0683A;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .table tr.warning {
+            background-color: #FFE7C4;
+        }
+
+        .search-bar {
+            width: 50%;
+            padding: 8px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: 1px solid #A0683A;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <img src="ruta/a/logo.png" alt="Logo Don Galleto">
+        <h1>Inventario</h1>
+        <div class="menu-buttons">
+            <button onclick="window.location.href='Ventas/ventas.html'">VENTAS</button>
+            <button onclick="window.location.href='Corte/corte.html'">CORTE</button>
+            <button onclick="window.location.href='Inventario/inventario.html'">INVENTARIO</button>
+            <button onclick="window.location.href='Compras/compras.html'">COMPRAS</button>
+            <button onclick="window.location.href='Produccion/produccion.html'">PRODUCCIÓN</button>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <h2>Inventario de Ingredientes</h2>
+        <input type="text" class="search-bar" placeholder="Buscar ingrediente..." oninput="filterInventory(event)">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha de Caducidad</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Descripción</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-table">
+                <!-- Ingredientes cargados dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function loadInventory() {
+            const inventory = JSON.parse(localStorage.getItem('inventario')) || [];
+            inventory.sort((a, b) => new Date(a.fechaCaducidad) - new Date(b.fechaCaducidad));
+            displayInventory(inventory);
+        }
+
+        function filterInventory(event) {
+            const search = event.target.value.toLowerCase();
+            const inventory = JSON.parse(localStorage.getItem('inventario')) || [];
+            const filtered = inventory.filter(item => item.nombre.toLowerCase().includes(search));
+            displayInventory(filtered);
+        }
+
+        function displayInventory(inventory) {
+            const tbody = document.getElementById('inventory-table');
+            tbody.innerHTML = '';
+            inventory.forEach(item => {
+                const row = document.createElement('tr');
+                if (new Date(item.fechaCaducidad) <= new Date()) row.classList.add('warning');
+                row.innerHTML = `
+                    <td>${item.nombre}</td>
+                    <td>${item.fechaCaducidad}</td>
+                    <td>${item.cantidad}</td>
+                    <td>${item.unidad}</td>
+                    <td>${item.descripcion}</td>
+                    <td>${item.proveedor}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        loadInventory();
+    </script>
+</body>
+</html>
